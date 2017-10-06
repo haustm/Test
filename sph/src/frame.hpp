@@ -8,4 +8,5 @@ class Frame
 	double time;
 	std::vector<Particle> particles;
 	static Frame initNew();
+    void writeFrame();
 };
