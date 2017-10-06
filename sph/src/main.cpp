@@ -23,10 +23,10 @@ int main()
     int iteration = 0;
 
 
-    while(iteration < 10000)
+    while(iteration < 1001)
     {
         initFrame.step();
-        if(iteration % 100)
+        if(iteration )
         {
             initFrame.writeFrame();
         }

@@ -11,7 +11,7 @@ class Particle
 
         Vector3d pos;
         Vector3d f;
-        Vector3d vhalf;
+        Vector3d vel;
 
         double mass;
         double rho_0, rho, ca, gamma;
@@ -28,5 +28,8 @@ class Particle
         rho = 0;
         ca = 100;
         gamma = 7;
+        vel << 0,0,0;
+
+        this->calcForces();
     }        
 };

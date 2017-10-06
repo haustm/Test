@@ -58,11 +58,6 @@ void Frame::step()
 
     for(std::vector<Particle>::iterator it = particles.begin(); it != particles.end(); ++it)
     {
-        it->calcForces();
-    }
-
-    for(std::vector<Particle>::iterator it = particles.begin(); it != particles.end(); ++it)
-    {
         it->move(0.1);
     }
 
