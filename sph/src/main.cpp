@@ -12,11 +12,27 @@ int main()
 	Frame initFrame = Frame::initNew();
 	cout << "done" << endl;
 
-
 	
     cout << "Write Init Frame... " ;
 	initFrame.writeFrame();
 	cout << "done" << endl;
+
+
+    cout << "Start Iteration..." << endl ;
+    
+    int iteration = 0;
+
+
+    while(iteration < 10000)
+    {
+        initFrame.step();
+        if(iteration % 100)
+        {
+            initFrame.writeFrame();
+        }
+        iteration++;
+    }
+
 
 	
 	return 0;

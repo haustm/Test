@@ -4,6 +4,7 @@
 #include <vtkXMLPolyDataWriter.h>
 #include <vtkPolyData.h>
 #include <vtkSmartPointer.h>
+#include <iostream>
 
 #include "frame.hpp"
 #include "particle.hpp"
@@ -17,9 +18,9 @@ Frame Frame::initNew()
 		for(int j = 0; j < 100; j++)
 		{
 			Particle tmp;
-			tmp.x = i * 0.1 ;
-			tmp.y = j * 0.1 ;
-			tmp.z = 0;
+			tmp.pos[0] = i * 0.1 ;
+			tmp.pos[1] = j * 0.1 ;
+			tmp.pos[2] = 0;
 			newF.particles.push_back(tmp);
 		}
     }
@@ -31,9 +32,10 @@ Frame Frame::initNew()
 void Frame::writeFrame()
 {
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
-    for (auto i : particles)
+
+    for(std::vector<Particle>::iterator it = particles.begin(); it != particles.end(); ++it)
     {
-        points->InsertNextPoint ( i.x, i.y, i.z );
+        points->InsertNextPoint ( it->pos[0], it->pos[1], it->pos[2] );
     }
 
 
@@ -43,9 +45,27 @@ void Frame::writeFrame()
 
     // Write the file
     vtkSmartPointer<vtkXMLPolyDataWriter> writer = vtkSmartPointer<vtkXMLPolyDataWriter>::New();
-    writer->SetFileName("test.vtp");
+    std::string filename = "t." + std::to_string(int(this->time/0.1)) +".vtp";
+    writer->SetFileName(filename.c_str());
     writer->SetInputData(polydata);
 
     writer->Write();
+
+}
+
+void Frame::step()
+{
+
+    for(std::vector<Particle>::iterator it = particles.begin(); it != particles.end(); ++it)
+    {
+        it->calcForces();
+    }
+
+    for(std::vector<Particle>::iterator it = particles.begin(); it != particles.end(); ++it)
+    {
+        it->move(0.1);
+    }
+
+    this->time += 0.1;
 
 }
