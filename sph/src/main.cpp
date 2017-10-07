@@ -23,10 +23,10 @@ int main()
     int iteration = 0;
 
 
-    while(iteration < 1001)
+    while(iteration < 101)
     {
         initFrame.step();
-        if(iteration )
+        if(iteration)
         {
             initFrame.findNeighbours();
             initFrame.writeFrame();

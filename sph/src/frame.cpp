@@ -28,7 +28,7 @@ Frame Frame::initNew()
     {
 		for(int j = 0; j < 10; j++)
 		{
-			Particle tmp;
+			Particle tmp(&newF);
 			tmp.pos[0] = i * 0.1 ;
 			tmp.pos[1] = j * 0.1 ;
 			tmp.pos[2] = 0;

@@ -5,6 +5,7 @@
 
 using namespace Eigen;
 
+class Frame;
 
 class Particle
 {
@@ -16,6 +17,7 @@ class Particle
         int id;
 
         std::vector<Particle*> neighbours;
+        Frame* mother;
 
         double mass;
         double rho_0, rho, ca, gamma;
@@ -28,7 +30,7 @@ class Particle
 
 
 
-    Particle()
+    Particle(Frame* parent)
     {
         mass = 1000;
         rho_0 = 1000;
@@ -36,6 +38,7 @@ class Particle
         ca = 100;
         gamma = 7;
         vel << 0,0,0;
+        this->mother = parent;
 
         this->calcForces();
     }        
