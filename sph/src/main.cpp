@@ -28,6 +28,7 @@ int main()
         initFrame.step();
         if(iteration )
         {
+            initFrame.findNeighbours();
             initFrame.writeFrame();
         }
         iteration++;

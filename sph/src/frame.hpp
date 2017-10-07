@@ -13,4 +13,7 @@ class Frame
 	static Frame initNew();
     void writeFrame();
     void step();
+    double kern(double x, double h);
+    double gradKern(double x, double h);
+    void findNeighbours();
 };

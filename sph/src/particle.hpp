@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Eigen/Dense>
+#include <vector>
 
 using namespace Eigen;
 
@@ -12,14 +13,20 @@ class Particle
         Vector3d pos;
         Vector3d f;
         Vector3d vel;
+        int id;
+
+        std::vector<Particle*> neighbours;
 
         double mass;
         double rho_0, rho, ca, gamma;
 
-        void calcForces();
         void move(double dt);
 
+        void calcForces();
         void calcP();
+        void calcRho();
+
+
 
     Particle()
     {

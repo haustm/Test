@@ -3,6 +3,8 @@
 
 void Particle::calcForces()
 {
+    calcRho();
+
     this->f *= 0;
     Vector3d g(0,0,-9.81);
     
@@ -33,4 +35,17 @@ void Particle::move(double dt)
 void Particle::calcP()
 {
     double pa = rho_0 * ca*ca / gamma * ( pow((rho / rho_0), gamma) - 1 );
+}
+
+void Particle::calcRho()
+{
+    double sum = 0;
+    double h = 0.1;
+    for(auto p : neighbours)
+    {
+        double x = (this->pos - p->pos).norm();
+        double vel = (this->vel - p->vel).norm();
+        sum = p->mass * vel * (-2.0*x*exp(-1.0*x*x/(h*h)) / (h*h*h*sqrt(3.14159)));
+    }
+    this->rho += sum * 0.1;
 }
