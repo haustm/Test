@@ -22,18 +22,22 @@
 Frame Frame::initNew()
 {
     Frame newF = Frame();
+    newF.dt = 0.1;
     
     int id = 0;
-    for(int i = 0; i < 10; i++)
+    for(int i = -10; i < 10; i++)
     {
-		for(int j = 0; j < 10; j++)
+		for(int j = -10; j < 10; j++)
 		{
 			Particle tmp(&newF);
 			tmp.pos[0] = i * 0.1 ;
 			tmp.pos[1] = j * 0.1 ;
 			tmp.pos[2] = 0;
             tmp.id = id; id++;
-			newF.particles.push_back(tmp);
+            if (sqrt((tmp.pos[0]*tmp.pos[0]) +(tmp.pos[1]*tmp.pos[1]) + (tmp.pos[2]*tmp.pos[2]) ) < 0.5)
+            {
+              newF.particles.push_back(tmp);
+            }
 		}
     }
 
@@ -48,22 +52,28 @@ void Frame::writeFrame()
     vtkSmartPointer<vtkFloatArray> densities = vtkSmartPointer<vtkFloatArray>::New();
     densities->SetNumberOfComponents(1);
     densities->SetName("rho");
+
+    vtkSmartPointer<vtkFloatArray> pressures = vtkSmartPointer<vtkFloatArray>::New();
+    pressures->SetNumberOfComponents(1);
+    pressures->SetName("p");
  
     for(std::vector<Particle>::iterator it = particles.begin(); it != particles.end(); ++it)
     {
         points->InsertNextPoint ( it->pos[0], it->pos[1], it->pos[2]);
         densities->InsertNextValue(it->rho);
+        pressures->InsertNextValue(it->press);
     }
 
     // Create a polydata object and add the points to it.
     vtkSmartPointer<vtkPolyData> polydata =  vtkSmartPointer<vtkPolyData>::New();
     polydata->SetPoints(points);
     polydata->GetPointData()->AddArray(densities);
+    polydata->GetPointData()->AddArray(pressures);
 
 
     // Write the file
     vtkSmartPointer<vtkXMLPolyDataWriter> writer = vtkSmartPointer<vtkXMLPolyDataWriter>::New();
-    std::string filename = "t." + std::to_string(int(this->time/0.1)) +".vtp";
+    std::string filename = "t." + std::to_string(int(this->time/this->dt)) +".vtp";
     writer->SetFileName(filename.c_str());
     writer->SetInputData(polydata);
 
@@ -76,10 +86,10 @@ void Frame::step()
 
     for(std::vector<Particle>::iterator it = particles.begin(); it != particles.end(); ++it)
     {
-        it->move(0.1);
+        it->move(dt);
     }
 
-    this->time += 0.1;
+    this->time += dt;
 
 }
 
