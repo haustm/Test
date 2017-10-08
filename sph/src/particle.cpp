@@ -9,21 +9,22 @@ void Particle::move(double dt)
     calcP();
     moveRho();
 
-    /* Euler
+    // Euler
     Vector3d accel = this->f / this->mass;
     this->pos += this->vel * dt;
     this->vel += accel * dt;
     calcForces();
-    */
+    
 
     /* Leapfrog
-    */
+
     Vector3d accel = this->f / this->mass;
     this->vel += accel * dt * 0.5;
     this->pos += this->vel * dt;
     calcForces();
     accel = this->f / this->mass;
     this->vel += 0.5 * accel * dt;
+    */
 }
 
 
@@ -99,6 +100,5 @@ void Particle::calcForces()
     }
     grad *= -1;
     this->f += grad;
-    //std::cout << f[0] << " " << f[1] << std::endl;
 }
 

@@ -22,11 +22,11 @@ int main()
     
     int iteration = 0;
     
-    while(iteration < 50000)
+    while(iteration < 5000)
     {
         cout << "Start Iteration " << iteration << " ... " << endl;
         initFrame.step();
-        if (iteration % 100 == 0) initFrame.writeFrame();
+        if (iteration % 10 == 0) initFrame.writeFrame();
         iteration++;
     }
 
