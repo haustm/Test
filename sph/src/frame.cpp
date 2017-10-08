@@ -98,7 +98,7 @@ void Frame::step()
 double Frame::kern(double x, double h)
 {
     if (x > 3*h) return 0;
-    return exp(-1.0*x*x/(h*h)) / (h*sqrt(3.14159));
+    return exp(-1.0*x*x/(h*h)) / (h*h*(3.14159));
 }
 
 

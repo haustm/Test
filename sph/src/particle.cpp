@@ -64,6 +64,7 @@ void Particle::calcRho()
     //double hnew = 1.3 * pow(( this->mass / this->rho), 0.5) ;
     //if (hnew > 0 and hnew < 10) this->h = hnew;
     //std::cout <<sum << " "<< "" << " ";
+    this->h = h_0 * sqrt(rho_0 / rho );
 }
 void Particle::calcRho0()
 {
