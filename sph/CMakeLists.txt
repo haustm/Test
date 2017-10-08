@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(sph_test)
 
+set(VTK_DIR "/home/arc/Software/VTK-8.0.1/")
 find_package(VTK REQUIRED)
 include(${VTK_USE_FILE})
 

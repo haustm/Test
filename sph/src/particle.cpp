@@ -7,7 +7,7 @@ void Particle::move(double dt)
 {
     calcRho();
     calcP();
-    //moveRho();
+    moveRho();
 
     /* Euler
     Vector3d accel = this->f / this->mass;
@@ -36,16 +36,16 @@ void Particle::calcP()
 void Particle::moveRho()
 {
     double sum = 0;
-    double h = 0.4;
+    double h = mother->h ;
 
     for(auto& p : this->mother->particles)
     {
         if (p.id == this->id) continue;
         double x = (this->pos - p.pos).norm();
-        if ( x > 2*h || x < 1e-12) continue;
-        sum += p.mass *(this->vel - p.vel).dot(
-            (-2.0*x*exp(-1.0*x*x/(h*h)) / (h*h*h*h*sqrt(3.14159))) * (this->pos - p.pos)
-            );
+        //if (x < 1e-12) continue;
+         
+        sum += p.mass * (this->vel - p.vel).dot( mother->gradKern(this->pos, p.pos, h)) ;
+        
     }
 
     this->rho += sum * mother->dt;
@@ -54,15 +54,28 @@ void Particle::moveRho()
 void Particle::calcRho()
 {
     double sum = 0;
-    double h = 0.4;
+    double h = mother->h;
     for(auto& p : this->mother->particles)
     {
         if (p.id == this->id) continue;
         double x = (this->pos - p.pos).norm() / h;
-        if ( x > 2*h || x < 1e-12) continue;
-        sum += p.mass * (exp(-1.0*x*x/(h*h)) / (h*h*sqrt(3.14159)));
+        //if ( x > 2*h || x < 1e-12) continue;
+        sum += p.mass * this->mother->kern(x, h);
     }
     this->rho = sum;
+}
+void Particle::calcRho0()
+{
+    double sum = 0;
+    double h = mother->h;
+    for(auto& p : this->mother->particles)
+    {
+        if (p.id == this->id) continue;
+        double x = (this->pos - p.pos).norm() / h;
+        sum += p.mass * this->mother->kern(x, h);
+    }
+    std::cout << sum << std::endl;
+    this->rho_0 = sum;
 }
 
 void Particle::calcForces()
@@ -72,22 +85,17 @@ void Particle::calcForces()
     
     this->f += this->mass * g;
 
-    double sum = 0;
-    double h = 0.4;
+    double h = mother->h;
     Vector3d grad;
     grad << 0,0,0 ;
     for(auto& p : this->mother->particles)
     {
         if (p.id == this->id) continue;
         double x = (this->pos - p.pos).norm();
-        if ( x > 2*h || x < 1e-12) continue;
-        double masse = p.mass;
+        //if ( x > 2*h || x < 1e-12) continue;
         double Pa = this->press;
         double Pb = p.press;
-        sum = p.mass * (Pa / (this->rho * this->rho) + Pb / (p.rho*p.rho)) ;
-        double deriv = (-2.0*x*exp(-1.0*x*x/(h*h)) / (h*h*h*h*sqrt(3.14159))) ;
-        grad = deriv * (this->pos - p.pos) / x;
-        grad *= sum ;
+        grad += p.mass * (Pa / (this->rho * this->rho) + Pb / (p.rho*p.rho)) * mother->gradKern(this->pos, p.pos,h) ;
     }
     grad *= -1;
     this->f += grad;

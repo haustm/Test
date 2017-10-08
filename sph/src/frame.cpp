@@ -22,22 +22,25 @@
 Frame Frame::initNew()
 {
     Frame newF = Frame();
-    newF.dt = 0.1;
+    newF.dt = 0.0001;
+    newF.h = 0.5;
     
     int id = 0;
-    for(int i = -10; i < 10; i++)
+    for(int i = -5; i < 5; i++)
     {
-		for(int j = -10; j < 10; j++)
+		for(int j = -5; j < 5; j++)
 		{
 			Particle tmp(&newF);
 			tmp.pos[0] = i * 0.1 ;
 			tmp.pos[1] = j * 0.1 ;
 			tmp.pos[2] = 0;
             tmp.id = id; id++;
-            if (sqrt((tmp.pos[0]*tmp.pos[0]) +(tmp.pos[1]*tmp.pos[1]) + (tmp.pos[2]*tmp.pos[2]) ) < 0.5)
+            /*
+            if (sqrt((tmp.pos[0]*tmp.pos[0]) +(tmp.pos[1]*tmp.pos[1]) + (tmp.pos[2]*tmp.pos[2]) ) < 0.5)             */
             {
               newF.particles.push_back(tmp);
             }
+
 		}
     }
 
@@ -96,12 +99,21 @@ void Frame::step()
 
 double Frame::kern(double x, double h)
 {
+    if (x > 3*h) return 0;
     return exp(-1.0*x*x/(h*h)) / (h*sqrt(3.14159));
 }
 
-double Frame::gradKern(double x, double h)
+
+Vector3d Frame::gradKern(Vector3d a, Vector3d b,  double h)
 {
-    return -2.0*x*exp(-1.0*x*x/(h*h)) / (h*h*h*sqrt(3.14159));
+    Vector3d zero;
+    zero << 0,0,0;
+    double x = (a - b).norm();
+    if( x > 3*h) return zero;
+    double deriv = (-2.0*x*exp(-1.0*x*x/(h*h)) / (h*h*h*h*sqrt(3.14159))) ;
+    Vector3d tmp = deriv * ( a -b ) / x;
+    return tmp; 
+    
 }
 
 void Frame::findNeighbours()

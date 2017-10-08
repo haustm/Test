@@ -1,0 +1,35 @@
+[CMake]
+Build Directory Count=1
+Current Build Directory Index=0
+
+[CMake][CMake Build Directory 0]
+Build Directory Path=/home/arc/Projekte/Test/sph/build
+Build Type=
+CMake Binary=/usr/bin/cmake
+Environment Profile=
+Extra Arguments=
+Install Directory=/usr/local
+
+[Launch]
+Launch Configurations=Launch Configuration 0
+
+[Launch][Launch Configuration 0]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=sph
+Type=Native Application
+
+[Launch][Launch Configuration 0][Data]
+Arguments=
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x02\x00\x00\x00\x06\x00s\x00p\x00h\x00\x00\x00\x06\x00s\x00p\x00h)
+Dependency Action=Build
+EnvironmentGroup=
+Executable=file:///home/arc/Projekte/Test/sph
+External Terminal=konsole --noclose --workdir %workdir -e %exe
+Project Target=sph,sph
+Use External Terminal=false
+Working Directory=
+isExecutable=false
+
+[Project]
+VersionControlSupport=kdevgit

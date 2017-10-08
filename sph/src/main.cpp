@@ -12,14 +12,7 @@ int main()
 	Frame initFrame = Frame::initNew();
 	cout << "done" << endl;
 
-    /*
-    for(auto p : initFrame.particles)
-    {
-        if(p.pos[0] < 0.3) p.vel << 0.2,0.3,0.0;
-    }
-
-    */
-
+    
     cout << "Write Init Frame... " ;
 	initFrame.writeFrame();
 	cout << "done" << endl;
@@ -28,11 +21,12 @@ int main()
     cout << "Start Iteration..." << endl ;
     
     int iteration = 0;
-    while(iteration < 5000)
+    
+    while(iteration < 50000)
     {
         cout << "Start Iteration " << iteration << " ... " << endl;
         initFrame.step();
-        if (iteration % 10 == 0) initFrame.writeFrame();
+        if (iteration % 100 == 0) initFrame.writeFrame();
         iteration++;
     }
 
