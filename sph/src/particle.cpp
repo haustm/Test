@@ -37,8 +37,6 @@ void Particle::calcP()
 void Particle::moveRho()
 {
     double sum = 0;
-    double h = mother->h ;
-
     for(auto& p : this->mother->particles)
     {
         if (p.id == this->id) continue;
@@ -55,7 +53,6 @@ void Particle::moveRho()
 void Particle::calcRho()
 {
     double sum = 0;
-    double h = mother->h;
     for(auto& p : this->mother->particles)
     {
         if (p.id == this->id) continue;
@@ -64,11 +61,13 @@ void Particle::calcRho()
         sum += p.mass * this->mother->kern(x, h);
     }
     this->rho = sum;
+    //double hnew = 1.3 * pow(( this->mass / this->rho), 0.5) ;
+    //if (hnew > 0 and hnew < 10) this->h = hnew;
+    //std::cout <<sum << " "<< "" << " ";
 }
 void Particle::calcRho0()
 {
     double sum = 0;
-    double h = mother->h;
     for(auto& p : this->mother->particles)
     {
         if (p.id == this->id) continue;
@@ -86,7 +85,6 @@ void Particle::calcForces()
     
     this->f += this->mass * g;
 
-    double h = mother->h;
     Vector3d grad;
     grad << 0,0,0 ;
     for(auto& p : this->mother->particles)

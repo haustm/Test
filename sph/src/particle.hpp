@@ -22,6 +22,7 @@ class Particle
         double mass;
         double rho_0, rho, ca, gamma;
         double press;
+        double h;
 
         void move(double dt);
 
@@ -35,7 +36,7 @@ class Particle
 
     Particle(Frame* parent)
     {
-        rho_0 = 8.8;
+        rho_0 = 8.0;
         mass = rho_0 * 0.1*0.1;
         rho = 30.0;
         press = 0.4;
@@ -43,6 +44,7 @@ class Particle
         gamma = 7;
         vel << 0 ,0 ,0;
         this->mother = parent;
+        h = 0.4;
 
         this->calcForces();
     }        

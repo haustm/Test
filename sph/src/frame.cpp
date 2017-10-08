@@ -23,7 +23,6 @@ Frame Frame::initNew()
 {
     Frame newF = Frame();
     newF.dt = 0.05;
-    newF.h = 1.3;
     
     int id = 0;
     for(int i = -10; i < 10; i++)
@@ -31,11 +30,11 @@ Frame Frame::initNew()
 		for(int j = -10; j < 10; j++)
 		{
 			Particle tmp(&newF);
-			tmp.pos[0] = i * 0.05 ;
-			tmp.pos[1] = j * 0.05 ;
+			tmp.pos[0] = i * 0.1 ;
+			tmp.pos[1] = j * 0.1 ;
 			tmp.pos[2] = 0;
             tmp.id = id; id++;
-            if (sqrt((tmp.pos[0]*tmp.pos[0]) +(tmp.pos[1]*tmp.pos[1]) + (tmp.pos[2]*tmp.pos[2]) ) < 0.5)
+            if (sqrt((tmp.pos[0]*tmp.pos[0]) +(tmp.pos[1]*tmp.pos[1]) + (tmp.pos[2]*tmp.pos[2]) ) < 0.8)
             {
               newF.particles.push_back(tmp);
             }

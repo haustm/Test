@@ -8,7 +8,6 @@ class Frame
 	public:
 	double time;
     double dt;
-    double h;
 
 	std::vector<Particle> particles;
 	static Frame initNew();
