@@ -31,21 +31,22 @@ class Particle
         void moveRho();
         void calcRho();
         void calcRho0();
+        double calcDamp(Particle& p);
 
 
 
     Particle(Frame* parent)
     {
-        rho_0 = 8.0;
-        h_0 = 1.2 * 0.1;
-        mass = rho_0 * 0.1*0.1;
-        rho = 30.0;
-        press = 0.4;
-        ca = 0.01;
+        h_0 = 0.7;
+        mass = 0.25*4;
+        rho_0 = 100 * mass / 1.0 / 3;
+        rho = rho_0;
+        press = 1.0;
+        ca = 1.0;
         gamma = 7;
         vel << 0 ,0 ,0;
         this->mother = parent;
-        h = 0.4;
+        h = 1.0;
 
         this->calcForces();
     }        

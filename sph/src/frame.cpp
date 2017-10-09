@@ -22,25 +22,26 @@
 Frame Frame::initNew()
 {
     Frame newF = Frame();
-    newF.dt = 0.05;
+    newF.dt = 0.005;
     
     int id = 0;
-    for(int i = -10; i < 10; i++)
+    for(int i = 0; i < 10; i++)
     {
-		for(int j = -10; j < 10; j++)
+		for(int j = 0; j < 10; j++)
 		{
 			Particle tmp(&newF);
 			tmp.pos[0] = i * 0.1 ;
 			tmp.pos[1] = j * 0.1 ;
 			tmp.pos[2] = 0;
             tmp.id = id; id++;
-            if (sqrt((tmp.pos[0]*tmp.pos[0]) +(tmp.pos[1]*tmp.pos[1]) + (tmp.pos[2]*tmp.pos[2]) ) < 0.8)
+            //if (sqrt((tmp.pos[0]*tmp.pos[0]) +(tmp.pos[1]*tmp.pos[1]) + (tmp.pos[2]*tmp.pos[2]) ) < 0.8)
             {
               newF.particles.push_back(tmp);
             }
 
 		}
     }
+    newF.N = id;
 
     return newF;    
 }
@@ -110,6 +111,31 @@ Vector3d Frame::gradKern(Vector3d a, Vector3d b,  double h)
     if( x > 3*h) return zero;
     double deriv = (-2.0*x*exp(-1.0*x*x/(h*h)) / (h*h*h*h*sqrt(3.14159))) ;
     Vector3d tmp = deriv * ( a -b ) / x;
+    return tmp; 
+    
+}
+
+double Frame::kern2(double x, double h)
+{
+    double w = 10.0/(7.0 * 3.141592 * h * h);
+    if( x >= 0 and x <= 1.0) w = w * (1 - 3/2* x*x * (1 - 0.5*x));
+    else if (x > 1.0 and x <= 2.0) w = w / 4 * pow((2 - x), 3);
+    else w = 0;
+    return w;    
+}
+
+
+Vector3d Frame::gradKern2(Vector3d a, Vector3d b,  double h)
+{
+    Vector3d zero;
+    zero << 0,0,0;
+    double x = (a - b).norm()/h;
+    double w = 10.0/(7.0 * 3.141592 * h * h);
+    if( x >= 0 and x <= 1.0) w = w * (0.75*x*x - 3*(1-0.5*x)*x);
+    else if (x > 1.0 and x <= 2.0) w = -3/4 * w * pow((2 - x), 2) ;
+    else return zero;
+    
+    Vector3d tmp = w * ( a - b ) /(a-b).norm();
     return tmp; 
     
 }

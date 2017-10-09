@@ -30,8 +30,11 @@ void Particle::move(double dt)
 
 void Particle::calcP()
 {
+    //std::cout << this->rho << " ";
+    //std::cout << this->press << " ";
     double pa = rho_0 * ca*ca / gamma * ( pow((rho / rho_0), gamma) - 1 );
     this->press = pa;
+    //std::cout << pa << " ";
 }
 
 void Particle::moveRho()
@@ -40,11 +43,7 @@ void Particle::moveRho()
     for(auto& p : this->mother->particles)
     {
         if (p.id == this->id) continue;
-        double x = (this->pos - p.pos).norm();
-        //if (x < 1e-12) continue;
-         
-        sum += p.mass * (this->vel - p.vel).dot( mother->gradKern(this->pos, p.pos, h)) ;
-        
+        sum += p.mass * (this->vel - p.vel).dot( mother->gradKern2(this->pos, p.pos, h)) ;
     }
 
     this->rho += sum * mother->dt;
@@ -58,13 +57,13 @@ void Particle::calcRho()
         if (p.id == this->id) continue;
         double x = (this->pos - p.pos).norm() / h;
         //if ( x > 2*h || x < 1e-12) continue;
-        sum += p.mass * this->mother->kern(x, h);
+        sum += p.mass * this->mother->kern2(x, h);
     }
     this->rho = sum;
     //double hnew = 1.3 * pow(( this->mass / this->rho), 0.5) ;
     //if (hnew > 0 and hnew < 10) this->h = hnew;
     //std::cout <<sum << " "<< "" << " ";
-    this->h = h_0 * sqrt(rho_0 / rho );
+    //this->h = h_0 * sqrt(rho_0 / rho );
 }
 void Particle::calcRho0()
 {
@@ -73,11 +72,24 @@ void Particle::calcRho0()
     {
         if (p.id == this->id) continue;
         double x = (this->pos - p.pos).norm() / h;
-        sum += p.mass * this->mother->kern(x, h);
+        sum += p.mass * this->mother->kern2(x, h);
     }
     std::cout << sum << std::endl;
     this->rho_0 = sum;
 }
+
+
+double Particle::calcDamp(Particle& p)
+{
+    double alpha = 10;
+    double meanRho = 0.5 * (this->rho + p.rho);
+    Vector3d vab = this->vel - p.vel;
+    Vector3d rab = this->pos - p.pos;
+    double d = - alpha * this->ca / meanRho * vab.dot(rab) / rab.norm();
+    //std::cout << d << " ";
+    return d;
+}
+
 
 void Particle::calcForces()
 {
@@ -95,7 +107,9 @@ void Particle::calcForces()
         //if ( x > 2*h || x < 1e-12) continue;
         double Pa = this->press;
         double Pb = p.press;
-        grad += p.mass * (Pa / (this->rho * this->rho) + Pb / (p.rho*p.rho)) * mother->gradKern(this->pos, p.pos,h) ;
+        double damping = calcDamp(p);
+      
+        grad += p.mass * (Pa / (this->rho * this->rho) + Pb / (p.rho*p.rho) + damping) * mother->gradKern2(this->pos, p.pos,h) ;
     }
     grad *= -1;
     this->f += grad;
