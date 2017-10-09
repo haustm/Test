@@ -46,7 +46,7 @@ class Particle
         gamma = 7;
         vel << 0 ,0 ,0;
         this->mother = parent;
-        h = 1.0;
+        h = 0.3;
 
         this->calcForces();
     }        

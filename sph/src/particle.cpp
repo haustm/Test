@@ -81,7 +81,7 @@ void Particle::calcRho0()
 
 double Particle::calcDamp(Particle& p)
 {
-    double alpha = 10;
+    double alpha = 0.3;
     double meanRho = 0.5 * (this->rho + p.rho);
     Vector3d vab = this->vel - p.vel;
     Vector3d rab = this->pos - p.pos;

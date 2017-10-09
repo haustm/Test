@@ -22,7 +22,7 @@
 Frame Frame::initNew()
 {
     Frame newF = Frame();
-    newF.dt = 0.005;
+    newF.dt = 0.05;
     
     int id = 0;
     for(int i = 0; i < 10; i++)
