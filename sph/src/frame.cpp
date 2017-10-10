@@ -31,7 +31,7 @@ Frame Frame::initNew()
 		{
 			Particle tmp(&newF);
 			tmp.pos[0] = i * 0.05  ;
-			tmp.pos[1] = j * 0.05 + 0.1;
+			tmp.pos[1] = j * 0.05 + 0.0;
 			tmp.pos[2] = 0;
             tmp.id = id; id++;
             //if (sqrt((tmp.pos[0]*tmp.pos[0]) +(tmp.pos[1]*tmp.pos[1]) + (tmp.pos[2]*tmp.pos[2]) ) < 0.8)

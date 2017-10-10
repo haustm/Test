@@ -38,16 +38,16 @@ class Particle
 
     Particle(Frame* parent)
     {
-        h_0 = 0.7;
+        h_0 = 0.0;
         mass = 2.5;
         rho_0 = 1000.0;
         rho = rho_0;
         press = 1.0;
-        ca = 1;
+        ca = 40.0;
         gamma = 7;
         vel << 0 ,0 ,0;
         this->mother = parent;
-        h = 0.05*1.2;
+        h = 0.05*1.5;
 
         this->calcForces();
     }        

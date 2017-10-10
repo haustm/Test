@@ -5,34 +5,37 @@
 
 void Particle::move(double dt)
 {
-    calcRho();
-    //moveRho();
+    //calcRho();
+    moveRho();
     calcP();
     checkCollision();
 
     // Euler
-    Vector3d accel = this->f / this->mass;
+    /*
+    Vector3d accel = this->f ;
     this->pos += this->vel * dt;
     this->vel += accel * dt;
     calcForces();
+    */
     
 
     /* Leapfrog
-
-    Vector3d accel = this->f / this->mass;
+    */
+    Vector3d accel = this->f ;
     this->vel += accel * dt * 0.5;
     this->pos += this->vel * dt;
     calcForces();
-    accel = this->f / this->mass;
+    accel = this->f;
     this->vel += 0.5 * accel * dt;
-    */
+    
 }
 
 
 void Particle::calcP()
 {
     double pa = rho_0 * ca*ca / gamma * ( pow((rho / rho_0), gamma) - 1 );
-    this->press = std::max(pa , 0.0) ;
+    //this->press = std::max(pa , 0.0) ;
+    this->press = pa;
     //std::cout << pa << " ";
 }
 
@@ -58,11 +61,11 @@ void Particle::calcRho()
         double x = (this->pos - p.pos).norm() / h;
         //if ( x > 2*h || x < 1e-12) continue;
         sum += p.mass * this->mother->kern2(x, h);
-        sumNorm += (p.mass / p.rho) * this->mother->kern2(x,h);
+        sumNorm += (p.mass / p.rho) * this->mother->kern2(x, h);
         
     }
-    //this->rho = sum / sumNorm;
-    this->rho = sum;
+    this->rho = sum; // / sumNorm;
+    //this->rho = sum;
     //double hnew = 1.3 * pow(( this->mass / this->rho), 0.5) ;
     //if (hnew > 0 and hnew < 10) this->h = hnew;
     //std::cout <<sum << " "<< "" << " ";
@@ -70,6 +73,7 @@ void Particle::calcRho()
 }
 void Particle::calcRho0()
 {
+    std::cout << "Achtung, vorsicht" << std::endl;
     double sum = 0;
     for(auto& p : this->mother->particles)
     {
@@ -84,7 +88,7 @@ void Particle::calcRho0()
 
 double Particle::calcDamp(Particle& p)
 {
-    double alpha = 0.3;
+    double alpha = 0.0;
     double meanRho = 0.5 * (this->rho + p.rho);
     Vector3d vab = this->vel - p.vel;
     Vector3d rab = this->pos - p.pos;
@@ -99,7 +103,7 @@ void Particle::calcForces()
     this->f *= 0;
     Vector3d g(0,-9.81*1,0);
     
-    this->f += this->mass * g;
+    this->f += g;
 
     Vector3d grad;
     grad << 0,0,0 ;
