@@ -21,5 +21,8 @@ class Frame
         double kern2(double x, double h);
         Vector3d gradKern2(Vector3d a, Vector3d b, double h);
     
+        double kern3(double x, double h);
+        Vector3d gradKern3(Vector3d a, Vector3d b, double h);
+        
         void findNeighbours();
 };

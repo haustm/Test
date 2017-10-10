@@ -22,7 +22,7 @@
 Frame Frame::initNew()
 {
     Frame newF = Frame();
-    newF.dt = 0.0005;
+    newF.dt = 0.0001;
     
     int id = 0;
     for(int i = 0; i < 20; i++)
@@ -118,9 +118,9 @@ Vector3d Frame::gradKern(Vector3d a, Vector3d b,  double h)
 double Frame::kern2(double x, double h)
 {
     double w = 10.0/(7.0 * 3.141592 * h * h);
-    if( x >= 0 and x <= 1.0) w = w * (1 - 3/2* x*x * (1 - 0.5*x));
+    if( x >= 0 and x <= 1.0) w = w * (1 - 3.0/2.0* x*x * (1 - 0.5*x));
     else if (x > 1.0 and x <= 2.0) w = w / 4 * pow((2 - x), 3);
-    else w = 0;
+    else w = 0.0;
     return w;    
 }
 
@@ -132,13 +132,27 @@ Vector3d Frame::gradKern2(Vector3d a, Vector3d b,  double h)
     double x = (a - b).norm()/h;
     double w = 10.0/(7.0 * 3.141592 * h * h);
     if( x >= 0 and x <= 1.0) w = w * (0.75*x*x - 3*(1-0.5*x)*x);
-    else if (x > 1.0 and x <= 2.0) w = -3/4 * w * pow((2 - x), 2) ;
+    else if (x > 1.0 and x <= 2.0) w = -3.0/4.0 * w * pow((2 - x), 2) ;
     else return zero;
     
-    Vector3d tmp = w * ( a - b ) /(a-b).norm();
+    Vector3d tmp = w * ( a - b ) / (a-b).norm();
     return tmp; 
     
 }
+
+double Frame::kern3(double x, double h)
+{
+    return 0;
+}
+
+
+Vector3d Frame::gradKern3(Vector3d a, Vector3d b, double h)
+{
+    Vector3d x;
+    return x;
+}
+
+
 
 void Frame::findNeighbours()
 {
