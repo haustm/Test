@@ -26,7 +26,7 @@ int main()
     {
         cout << "Start Iteration " << iteration << " ... " << endl;
         initFrame.step();
-        if (iteration % 1 == 0) initFrame.writeFrame();
+        if (iteration % 5 == 0) initFrame.writeFrame();
         iteration++;
     }
 

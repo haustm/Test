@@ -6,8 +6,9 @@
 void Particle::move(double dt)
 {
     calcRho();
+    //moveRho();
     calcP();
-    moveRho();
+    checkCollision();
 
     // Euler
     Vector3d accel = this->f / this->mass;
@@ -30,10 +31,8 @@ void Particle::move(double dt)
 
 void Particle::calcP()
 {
-    //std::cout << this->rho << " ";
-    //std::cout << this->press << " ";
     double pa = rho_0 * ca*ca / gamma * ( pow((rho / rho_0), gamma) - 1 );
-    this->press = pa;
+    this->press = std::max(pa , 0.0) ;
     //std::cout << pa << " ";
 }
 
@@ -52,13 +51,17 @@ void Particle::moveRho()
 void Particle::calcRho()
 {
     double sum = 0;
+    double sumNorm = 0;
     for(auto& p : this->mother->particles)
     {
         if (p.id == this->id) continue;
         double x = (this->pos - p.pos).norm() / h;
         //if ( x > 2*h || x < 1e-12) continue;
         sum += p.mass * this->mother->kern2(x, h);
+        sumNorm += (p.mass / p.rho) * this->mother->kern2(x,h);
+        
     }
+    //this->rho = sum / sumNorm;
     this->rho = sum;
     //double hnew = 1.3 * pow(( this->mass / this->rho), 0.5) ;
     //if (hnew > 0 and hnew < 10) this->h = hnew;
@@ -94,7 +97,7 @@ double Particle::calcDamp(Particle& p)
 void Particle::calcForces()
 {
     this->f *= 0;
-    Vector3d g(0,-9.81*0,0);
+    Vector3d g(0,-9.81*1,0);
     
     this->f += this->mass * g;
 
@@ -115,3 +118,13 @@ void Particle::calcForces()
     this->f += grad;
 }
 
+void Particle::checkCollision()
+{
+    if( pos[0] < 0 ){ pos[0] = 0.0 ; vel[0] *= -1; }
+    if( pos[1] < 0 ){ pos[1] = 0.0 ; vel[1] *= -1; }
+    if( pos[2] < 0 ){ pos[2] = 0.0 ; vel[2] *= -1; }
+    
+    if( pos[0] > 1.5 ){ pos[0] = 1.5 ; vel[0] *= -1; }
+    if( pos[1] > 2.0 ){ pos[1] = 2.0 ; vel[1] *= -1; }
+    if( pos[2] > 1.0 ){ pos[2] = 1.0 ; vel[2] *= -1; }
+}

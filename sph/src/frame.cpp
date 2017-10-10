@@ -22,16 +22,16 @@
 Frame Frame::initNew()
 {
     Frame newF = Frame();
-    newF.dt = 0.05;
+    newF.dt = 0.0005;
     
     int id = 0;
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 20; i++)
     {
-		for(int j = 0; j < 10; j++)
+		for(int j = 0; j < 20; j++)
 		{
 			Particle tmp(&newF);
-			tmp.pos[0] = i * 0.1 ;
-			tmp.pos[1] = j * 0.1 ;
+			tmp.pos[0] = i * 0.05  ;
+			tmp.pos[1] = j * 0.05 + 0.1;
 			tmp.pos[2] = 0;
             tmp.id = id; id++;
             //if (sqrt((tmp.pos[0]*tmp.pos[0]) +(tmp.pos[1]*tmp.pos[1]) + (tmp.pos[2]*tmp.pos[2]) ) < 0.8)
@@ -146,7 +146,7 @@ void Frame::findNeighbours()
     {
         for(std::vector<Particle>::iterator jt = particles.begin(); jt != particles.end(); ++jt)
         {
-            it->neighbours.push_back(&(*jt));
+            if( abs((it->pos - jt->pos).norm()) < 4*it->h ) it->neighbours.push_back(&(*jt));
         }
     }
 }

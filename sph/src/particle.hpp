@@ -32,21 +32,22 @@ class Particle
         void calcRho();
         void calcRho0();
         double calcDamp(Particle& p);
+        void checkCollision();
 
 
 
     Particle(Frame* parent)
     {
         h_0 = 0.7;
-        mass = 0.25*4;
-        rho_0 = 100 * mass / 1.0 / 3;
+        mass = 2.5;
+        rho_0 = 1000.0;
         rho = rho_0;
         press = 1.0;
-        ca = 1.0;
+        ca = 1;
         gamma = 7;
         vel << 0 ,0 ,0;
         this->mother = parent;
-        h = 0.3;
+        h = 0.05*1.2;
 
         this->calcForces();
     }        
