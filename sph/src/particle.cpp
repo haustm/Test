@@ -78,7 +78,7 @@ void Particle::calcRho0()
 
 double Particle::calcDamp(Particle& p)
 {
-    double alpha = 0.5;
+    double alpha = 0.3;
     double meanRho = 0.5 * (this->rho + p.rho);
     Vector3d vab = this->vel - p.vel;
     Vector3d rab = this->pos - p.pos;
@@ -106,6 +106,10 @@ void Particle::calcForces()
     }
     grad *= -1;
     this->f += grad + g;
+    
+    this->h = 1.3 * pow((this->mass / this->rho ), 0.5); 
+    
+    
 }
 
 void Particle::checkCollision()

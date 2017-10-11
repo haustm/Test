@@ -22,7 +22,7 @@ int main()
     
     int iteration = 0;
     
-    while(iteration < 5000)
+    while(iteration < 50000)
     {
         cout << "Start Iteration " << iteration << " ... " << endl;
         initFrame.step();
