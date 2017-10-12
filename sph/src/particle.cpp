@@ -78,7 +78,7 @@ void Particle::calcRho0()
 
 double Particle::calcDamp(Particle& p)
 {
-    double alpha = 0.3;
+    double alpha = 0.2;
     double meanRho = 0.5 * (this->rho + p.rho);
     Vector3d vab = this->vel - p.vel;
     Vector3d rab = this->pos - p.pos;
@@ -118,7 +118,7 @@ void Particle::checkCollision()
     if( pos[1] < 0 ){ pos[1] = 0.0 ; vel[1] *= -1; }
     if( pos[2] < 0 ){ pos[2] = 0.0 ; vel[2] *= -1; }
     
-    if( pos[0] > 1.5 ){ pos[0] = 1.5 ; vel[0] *= -1; }
-    if( pos[1] > 2.0 ){ pos[1] = 2.0 ; vel[1] *= -1; }
+    if( pos[0] > 2.5 ){ pos[0] = 2.5 ; vel[0] *= -1; }
+    if( pos[1] > 3.0 ){ pos[1] = 3.0 ; vel[1] *= -1; }
     if( pos[2] > 1.0 ){ pos[2] = 1.0 ; vel[2] *= -1; }
 }
